@@ -12,7 +12,7 @@ use std::process::{Child, Command, Stdio};
 fn it_generates_the_config() {
     let fake_home_dir = env::current_dir()
         .expect("could not retrieve cwd")
-        .join(".it_generates_the_config");
+        .join("it_generates_the_config");
     let cmd = config_with_home(fake_home_dir.to_str().unwrap());
     let mut stdin = cmd.stdin.unwrap();
 
@@ -25,7 +25,6 @@ fn it_generates_the_config() {
         .read_to_string(&mut buffer)
         .expect("could not read output");
     assert!(buffer.contains("Enter email: \nEnter api key: \n Successfully configured."));
-    eprintln!("{}", buffer);
 
     let config_file = fake_home_dir
         .join(".wrangler")
