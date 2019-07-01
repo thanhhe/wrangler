@@ -1,6 +1,7 @@
 use assert_cmd::prelude::*;
 use std::env;
 use std::fs;
+use std::fs::File;
 use std::io::prelude::*;
 use std::process::{Child, Command, Stdio};
 
@@ -12,7 +13,7 @@ use std::process::{Child, Command, Stdio};
 fn it_generates_the_config() {
     let fake_home_dir = env::current_dir()
         .expect("could not retrieve cwd")
-        .join("it_generates_the_config");
+        .join(".it_generates_the_config");
     let cmd = config_with_home(fake_home_dir.to_str().unwrap());
     let mut stdin = cmd.stdin.unwrap();
 
@@ -39,6 +40,17 @@ fn it_generates_the_config() {
 api_key = "b"
 "#
     );
+
+    // check dir permissions (but not on windows)
+    if !cfg!(target_os = "windows") {
+        let mut command = Command::new("stat");
+        command.arg("-c");
+        command.arg("%a %n");
+        command.arg(&config_file);
+        let out = String::from_utf8(command.output().expect("could not stat file").stdout).unwrap();
+        // stat format is: "mode file"
+        assert!(out.starts_with("600"));
+    }
 
     fs::remove_dir_all(&fake_home_dir).expect("could not delete dir");
 }
