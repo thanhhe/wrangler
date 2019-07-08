@@ -152,6 +152,18 @@ Wrangler 1.1.0 includes a number of improvements to documentation and project st
 
 - ### 🔧 Maintenance
 
+  - **Fix `wrangler` terminal warnings - [xtuc], [pull/294]**
+  
+    This PR fixes a number of small warnings throughout the `wrangler` codebase, which were causing the pre-commit/push hooks to fail.
+  
+    [pull/294]: https://github.com/cloudflare/wrangler/pull/294
+
+  - **Activate backtracing - [xtuc], [pull/291]**
+  
+    Rust's backtracing is now enabled in CI for easier debugging of `wrangler` builds.
+  
+    [pull/291]: https://github.com/cloudflare/wrangler/pull/291
+
   - **Use serde for metadata - [xtuc], [pull/285]**
 
     This change adds proper construction of the worker metadata, previously, it was an error-prone string.
